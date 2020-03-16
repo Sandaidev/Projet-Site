@@ -10,6 +10,10 @@
 	src: url("../assets/fonts/comfortaa-bold.ttf");
 }
 
+html {
+	font-family: comfortaa;
+}
+
 .login-main-container {
 	background-color: #e9ffb9;
 }
