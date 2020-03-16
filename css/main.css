@@ -6,16 +6,21 @@
 
 /* Version Bold de Comfortaa */
 @font-face {
-	font-family: comfortaa;
+	font-family: comfortaa-bold;
 	src: url("../assets/fonts/comfortaa-bold.ttf");
-	font-weight: bold;
+}
+
+.login-main-container {
+	background-color: #e9ffb9;
 }
 
 /* Style le header */
 .header {
+	font-family: comfortaa;
 	overflow: hidden;
-	background-color: #f1f1f1;
+	background-color: rgb(216, 216, 216);
 	padding: 20px 10px;
+	border-radius: 20px;
 }
 	
 /* Style les liens du header */
@@ -33,18 +38,16 @@
 /* Style le lien du logo */
 .header a.logo {
 	font-size: 25px;
-	font-weight: bold;
 }
 	
 /* Style du lien au hover */
 .header a:hover {
-	background-color: #ddd;
-	color: black;
+	background-color: rgb(196, 196, 196);
 }
 
 /* Style du lien actif */
 .header a.active {
-	background-color: dodgerblue;
+	background-color: black;
 	color: white;
 }
 
@@ -52,6 +55,29 @@
 .header-right {
 	float: right;
 }
+
+.login-container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	border: 2px solid grey;
+	border-radius: 10px;
+
+	text-align: center;
+	padding: 15px;
+}
+
+img {
+	height: 200px;
+	width: 200px;
+}
+
+h2 {
+	font-family: comfortaa;
+}
+
 
 /* Responsiveness - Si l'écran fait 500 px ou moins, on stack les liens au dessus des autres */
 @media screen and (max-width: 500px) {
