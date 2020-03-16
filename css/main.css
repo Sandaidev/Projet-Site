@@ -14,15 +14,11 @@ html {
 	font-family: comfortaa;
 }
 
-.login-main-container {
-	background-color: #e9ffb9;
-}
-
 /* Style le header */
 .header {
 	font-family: comfortaa;
 	overflow: hidden;
-	background-color: rgb(216, 216, 216);
+	background-color: lightgrey;
 	padding: 20px 10px;
 	border-radius: 20px;
 }
@@ -89,7 +85,7 @@ h2 {
 	left: 0;
 	bottom: 0;
 	width: 100%;
-	background-color: grey;
+	background-color: lightgrey;
 	text-align: center;
 
 	font-size: 18px;
@@ -97,7 +93,7 @@ h2 {
 
 .footer a {
 	text-decoration: none;
-	color: white;
+	color: black;
 }
 
 /* Responsiveness - Si l'écran fait 500 px ou moins, on stack les liens au dessus des autres */
