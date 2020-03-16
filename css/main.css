@@ -71,6 +71,8 @@ html {
 
 	text-align: center;
 	padding: 15px;
+
+	box-shadow: grey 3px 3px 5px;
 }
 
 img {
@@ -82,6 +84,21 @@ h2 {
 	font-family: comfortaa;
 }
 
+.footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: grey;
+	text-align: center;
+
+	font-size: 18px;
+}
+
+.footer a {
+	text-decoration: none;
+	color: white;
+}
 
 /* Responsiveness - Si l'écran fait 500 px ou moins, on stack les liens au dessus des autres */
 @media screen and (max-width: 500px) {
