@@ -1,3 +1,16 @@
+/* Importation de la police Comfortaa */
+@font-face {
+  font-family: comfortaa;
+  src: url("../assets/fonts/comfortaa-regular.ttf")
+}
+
+/* Version Bold de Comfortaa */
+@font-face {
+  font-family: comfortaa;
+  src: url("../assets/fonts/comfortaa-bold.ttf");
+  font-weight: bold;
+}
+
 /* Style le header */
 .header {
     overflow: hidden;
