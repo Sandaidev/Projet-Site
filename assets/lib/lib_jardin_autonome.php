@@ -154,3 +154,50 @@ function truncate_history_table()
     $db_connection->query($truncate_query);
     $db_connection->close();
 }
+
+function return_formatted_sensor_table()
+{
+    global $db_servername;
+    global $db_username;
+    global $db_password;
+    global $table_sensors_name;
+    global $db_name;
+
+    $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
+
+    $select_sensors_query = "SELECT * FROM $table_sensors_name";
+    $result = $db_connection->query($select_sensors_query);
+
+    // Ugly code incoming, I have no idea on how else I'm doing this
+    // Basically, we have 4 vars, if one is true, it should increment by 25% the final result
+
+    $row = $result->fetch_assoc();
+
+    $cuve_percentage = "0%";
+
+    if ($row['CUVE1'] == 1) {
+        $cuve_percentage = "25%";
+
+        if ($row['CUVE2'] == 1) {
+            $cuve_percentage = "50%";
+
+            if ($row['CUVE3'] == 1) {
+                $cuve_percentage = "75%";
+
+                if ($row['CUVE4'] == 1) {
+                    $cuve_percentage = "100%";
+                }
+            }
+        }
+    }
+
+    $humidite_value = $row['HUMIDITE'];
+    $db_connection->close();
+
+    $final_result = [
+        'HUMIDITE_TERRE' => $humidite_value,
+        'POURCENTAGE_CUVE' => $cuve_percentage
+    ];
+
+    return $final_result;
+}
