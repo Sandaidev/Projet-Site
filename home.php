@@ -25,17 +25,15 @@
     <?php
 
     // Importation des librairies
-
     require_once "./assets/lib/lib_jardin_autonome.php";
 
-    // On check si la BDD existe et tout, sinon, on l'initalise...
-    // CA VA ÊTRE CHIANT BORDEL AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
-
-
-
+    // On regarde si la BDD existe
+    if (check_if_db_exists() == false) {
+        initialize_database();
+    }
 
     ?>
+
 
 
 
