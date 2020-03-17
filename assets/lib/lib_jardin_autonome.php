@@ -65,9 +65,12 @@ function initialize_database()
     $db_connection->query($create_table_history_query);
     $db_connection->query($create_table_sensors_query);
 
-    return true;
+    $initialize_table_sensors_query = "INSERT INTO `$table_sensors_name` (`CUVE1`, `CUVE2`, `CUVE3`, `CUVE4`, `HUMIDITE`) VALUES ('0', '0', '0', '0', '0')";
+    $db_connection->query($initialize_table_sensors_query);
 
     $db_connection->close();
+
+    return true;
 }
 
 
@@ -100,11 +103,17 @@ function inject_sensors_data_into_db($cuve_1, $cuve_2, $cuve_3, $cuve_4, $humidi
     global $db_username;
     global $db_password;
     global $table_sensors_name;
+    global $db_name;
 
-    $db_connection = new mysqli($db_servername, $db_username, $db_password);
-    $inject_data_query = "UPDATE `$table_sensors_name` SET `CUVE1`=$cuve_1,`CUVE2`=$cuve_2,`CUVE3`=$cuve_3,`CUVE4`=$cuve_4,`HUMIDITE`=$humidite WHERE 1";
+    $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
+    $inject_data_query = "UPDATE `$table_sensors_name` SET `CUVE1`='$cuve_1',`CUVE2`='$cuve_2',`CUVE3`='$cuve_3',`CUVE4`='$cuve_4',`HUMIDITE`='$humidite' WHERE 1";
 
+    // We inject the data to the sensors table
     $db_connection->query($inject_data_query);
+
+    // We now need to add a new line to the history table, with the current date.
+    insert_date_into_stats(date("m"), date("d"), date("G"));
+
     $db_connection->close();
 }
 
@@ -118,8 +127,9 @@ function insert_date_into_stats($month, $day, $hour)
     global $db_username;
     global $db_password;
     global $table_history_name;
+    global $db_name;
 
-    $db_connection = new mysqli($db_servername, $db_username, $db_password);
+    $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
     $insertion_query = "INSERT INTO `$table_history_name`(`mois`, `jour`, `heure`) VALUES ($month,$day,$hour)";
 
     $db_connection->query($insertion_query);
@@ -136,8 +146,9 @@ function truncate_history_table()
     global $db_username;
     global $db_password;
     global $table_history_name;
+    global $db_name;
 
-    $db_connection = new mysqli($db_servername, $db_username, $db_password);
+    $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
     $truncate_query = "TRUNCATE TABLE $table_history_name";
 
     $db_connection->query($truncate_query);
