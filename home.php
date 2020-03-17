@@ -21,6 +21,26 @@
             <a class="header-right" href="./about.html">À propos</a>
         </div>
     </div>
+
+    <?php
+
+    // Importation des librairies
+
+    require_once "./assets/lib/lib_jardin_autonome.php";
+
+    // On check si la BDD existe et tout, sinon, on l'initalise...
+    // CA VA ÊTRE CHIANT BORDEL AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+
+
+
+
+    ?>
+
+
+
+
+
 </body>
 
 </html>
