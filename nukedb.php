@@ -43,7 +43,7 @@
             // On nuke la BDD, et on redirige l'utilisateur vers la page index.php
             nuke_database();
             echo "<script>
-            t1 = window.setTimeout(function(){ window.location.replace('index.php'); },3000);
+            t1 = window.setTimeout(function(){ window.location.replace('index.php'); },1500);
             </script>"; // Redirect to index.php after 1.5 seconds
         }
 
