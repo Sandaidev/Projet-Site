@@ -72,6 +72,16 @@
 
     ?>
 
+    <div class="footer">
+
+        <?php
+
+        echo "<p>" . date("d M Y - H:i:s") . "</p>";
+
+        ?>
+
+    </div>
+
 </body>
 
 </html>
