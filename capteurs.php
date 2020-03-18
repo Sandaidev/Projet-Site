@@ -12,6 +12,7 @@ if (check_if_session_is_valid($_SESSION) == false) {
 
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="css/w3.css">
     <link rel="stylesheet" href="css/main.css">
     <title>Capteurs - Jardin Autonome</title>
 </head>
@@ -40,8 +41,15 @@ if (check_if_session_is_valid($_SESSION) == false) {
 
         $sensors_data = return_formatted_sensor_table();
 
-        echo "<p>Humidité de la terre : <strong>" . floatval($sensors_data['HUMIDITE_TERRE']) * 100 . "%</strong>";
-        echo "<br>";
+        $formatted_humidity = floatval($sensors_data['HUMIDITE_TERRE']) * 100 . "%";
+
+        echo "<p>Humidité de la terre :</p>
+
+        <div class='w3-light-grey w3-round'>
+            <div class='w3-container w3-round w3-blue' style='width:" . $formatted_humidity . "'>" . $formatted_humidity . "</div>
+          </div>";
+
+        echo "<hr>";
         echo "Dernière mise à jour : Le <strong>" . $sensors_data['DERNIERE_MISE_A_JOUR_MOIS'] . "/"
             . $sensors_data['DERNIERE_MISE_A_JOUR_JOUR'] . "</strong> à <strong>" . $sensors_data['DERNIERE_MISE_A_JOUR_HEURE'] . "h</strong>";
         ?>

@@ -12,6 +12,7 @@ if (check_if_session_is_valid($_SESSION) == false) {
 
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="css/w3.css">
     <link rel="stylesheet" href="css/main.css">
     <title>Accueil - Jardin Autonome</title>
 </head>
@@ -39,8 +40,15 @@ if (check_if_session_is_valid($_SESSION) == false) {
 
         $sensors_data = return_formatted_sensor_table();
 
-        echo "<p>Niveau d'eau dans la cuve : <strong>" . $sensors_data['POURCENTAGE_CUVE'] . "</strong>";
-        echo "<br>";
+        echo "<p>Niveau d'eau dans la cuve :</p>
+
+        <div class='w3-light-grey w3-round'>
+            <div class='w3-container w3-round w3-blue' style='width:" . $sensors_data['POURCENTAGE_CUVE'] . "'>" . $sensors_data['POURCENTAGE_CUVE'] . "</div>
+          </div>
+
+        ";
+
+        echo "<hr>";
         echo "Dernier rechargement de la cuve : Le <strong>" . $sensors_data['DERNIERE_RECHARGE_CUVE_MOIS'] . "/"
             . $sensors_data['DERNIERE_RECHARGE_CUVE_JOUR'] . "</strong> à <strong>" . $sensors_data['DERNIERE_RECHARGE_CUVE_HEURE'] . "h</strong>";
         echo "<br>";
@@ -49,6 +57,10 @@ if (check_if_session_is_valid($_SESSION) == false) {
         echo "<br>";
 
         ?>
+
+
+    </div>
+
 
     </div>
 
