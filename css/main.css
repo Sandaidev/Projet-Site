@@ -92,8 +92,6 @@ a {
 	font-weight: bold;
 }
 
-
-
 /* Responsiveness - Si l'écran fait 500 px ou moins, on stack les liens au dessus des autres */
 @media screen and (max-width: 500px) {
 	.header a {
