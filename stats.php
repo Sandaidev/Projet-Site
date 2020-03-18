@@ -32,20 +32,48 @@ if (check_if_session_is_valid($_SESSION) == false) {
     </div>
 
     <div class="login-container">
+        <h2>Statistiques</h2>
+        <hr>
 
         <?php
         require_once "./assets/lib/lib_jardin_autonome.php";
 
-        $sensors_data = return_formatted_sensor_table();
+        $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
+        $select_history_query = "SELECT * FROM $table_history_name LIMIT 16";
 
-        echo "<p>Humidité de la terre : <strong>" . floatval($sensors_data['HUMIDITE_TERRE']) * 100 . "%</strong>";
-        echo "<br>";
-        echo "Dernière mise à jour : Le <strong>" . $sensors_data['DERNIERE_MISE_A_JOUR_MOIS'] . "/"
-            . $sensors_data['DERNIERE_MISE_A_JOUR_JOUR'] . "</strong> à <strong>" . $sensors_data['DERNIERE_MISE_A_JOUR_HEURE'] . "h</strong>";
+        $select_history_result = $db_connection->query($select_history_query);
 
+        if ($select_history_result->num_rows > 0) {
+            // output data of each row
+
+            echo "<table>";
+            echo "<tr>
+                <th>Mois</th>
+                <th>Jour</th>
+                <th>Heure</th>
+            </tr>";
+
+            while ($row = $select_history_result->fetch_assoc()) {
+                echo "<tr>
+                    <td>" . $row['mois'] . "</td>"
+                    . "<td>" . $row['jour'] . "</td>"
+                    . "<td>" . $row['heure'] . "</td>"
+                    . "</tr>";
+            }
+
+            echo "</table>";
+        } else {
+            echo "<strong>0 results</strong>";
+        }
+
+        $db_connection->close();
 
         ?>
 
+    </div>
+
+    <div class="footer">
+        <h4>Liste des dernières mises à jour</h4>
     </div>
 
 </body>
