@@ -201,3 +201,17 @@ function return_formatted_sensor_table()
 
     return $final_result;
 }
+
+function nuke_database()
+{
+    global $db_servername;
+    global $db_username;
+    global $db_password;
+    global $db_name;
+
+    $db_connection = new mysqli($db_servername, $db_username, $db_password);
+    $drop_db_query = "DROP DATABASE $db_name";
+
+    $db_connection->query($drop_db_query);
+    $db_connection->close();
+}
