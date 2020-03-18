@@ -33,6 +33,22 @@ if (check_if_session_is_valid($_SESSION) == false) {
 
     <div class="login-container">
 
+        <?php
+        require_once "./assets/lib/lib_jardin_autonome.php";
+
+        $sensors_data = return_formatted_sensor_table();
+
+        echo "<p>Niveau d'eau dans la cuve : <strong>" . $sensors_data['POURCENTAGE_CUVE'] . "</strong>";
+        echo "<br>";
+        echo "Dernier rechargement de la cuve : Le <strong>" . $sensors_data['DERNIERE_RECHARGE_CUVE_MOIS'] . "/"
+            . $sensors_data['DERNIERE_RECHARGE_CUVE_JOUR'] . "</strong> à <strong>" . $sensors_data['DERNIERE_RECHARGE_CUVE_HEURE'] . "h</strong>";
+        echo "<br>";
+        echo "Dernier arrosage : Le <strong>" . $sensors_data['DERNIER_ARROSAGE_MOIS'] . "/"
+            . $sensors_data['DERNIER_ARROSAGE_JOUR'] . "</strong> à <strong>" . $sensors_data['DERNIER_ARROSAGE_HEURE'] . "h</strong>";
+        echo "<br>";
+
+        ?>
+
     </div>
 
 </body>
