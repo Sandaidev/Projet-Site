@@ -11,6 +11,8 @@ $table_creds_name = "creds";
 $creds_default_username = "jardin";
 $creds_default_password = "autonome";
 $table_sensors_default_value = "syncing...";
+$table_last_watering_default_value = "syncing...";
+$table_last_watering_name = "last_watering";
 
 
 function initialize_database()
@@ -31,6 +33,8 @@ function initialize_database()
     global $creds_default_username;
     global $creds_default_password;
     global $table_sensors_default_value;
+    global $table_last_watering_name;
+    global $table_last_watering_default_value;
 
     // Create and initialize a new mysqli object (Oriented Object amirite)
     $db_connection = new mysqli($db_servername, $db_username, $db_password);
@@ -72,28 +76,36 @@ function initialize_database()
 
     $create_table_creds_query = "CREATE TABLE `$table_creds_name` ( `username` VARCHAR(20) NOT NULL , `password` VARCHAR(64) NOT NULL )";
 
+    $create_table_last_watering_query = "CREATE TABLE `$table_last_watering_name` ( `mois` VARCHAR(20) NOT NULL , `jour` VARCHAR(20) NOT NULL , `heure` VARCHAR(20) NOT NULL )";
+
     $db_connection->query($create_table_history_query);
     $db_connection->query($create_table_sensors_query);
     $db_connection->query($create_table_creds_query);
+    $db_connection->query($create_table_last_watering_query);
 
     $initialize_table_sensors_query = "INSERT INTO `$table_sensors_name` (`CUVE1`, `CUVE2`, `CUVE3`, `CUVE4`, `HUMIDITE`) VALUES (
-    '$table_sensors_default_value',
-    '$table_sensors_default_value',
-    '$table_sensors_default_value',
-    '$table_sensors_default_value',
-    '$table_sensors_default_value')";
+        '$table_sensors_default_value',
+        '$table_sensors_default_value',
+        '$table_sensors_default_value',
+        '$table_sensors_default_value',
+        '$table_sensors_default_value')";
 
     $initialize_table_creds_query = "INSERT INTO `creds` (`username`, `password`) VALUES (
-    '$creds_default_username',
-    '$creds_default_password')";
+        '$creds_default_username',
+        '$creds_default_password')";
+
+    $initialize_table_last_watering_query = "INSERT INTO `$table_last_watering_name`(`mois`, `jour`, `heure`) VALUES (
+        $table_last_watering_default_value,
+        $table_last_watering_default_value,
+        $table_last_watering_default_value)";
 
     $db_connection->query($initialize_table_sensors_query);
     $db_connection->query($initialize_table_creds_query);
+    $db_connection->query($initialize_table_last_watering_query);
     $db_connection->close();
 
     return true;
 }
-
 
 function check_if_db_exists()
 {
@@ -125,9 +137,30 @@ function inject_sensors_data_into_db($cuve_1, $cuve_2, $cuve_3, $cuve_4, $humidi
     global $db_password;
     global $table_sensors_name;
     global $db_name;
+    global $table_last_watering_name;
 
     $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
+
+    $retrieve_data_query = "SELECT * FROM $table_sensors_name";
     $inject_data_query = "UPDATE `$table_sensors_name` SET `CUVE1`='$cuve_1',`CUVE2`='$cuve_2',`CUVE3`='$cuve_3',`CUVE4`='$cuve_4',`HUMIDITE`='$humidite' WHERE 1";
+
+    // We get the old humidity value from the database and compare it against the new one
+    $result = $db_connection->query($retrieve_data_query);
+    $row = $result->fetch_assoc();
+
+    $old_humidity_value = $row['HUMIDITE'];
+
+    if ($humidite > $old_humidity_value) {
+        // The new humidity value is greater than the older one,
+        // We need to update the last_watering table
+
+        $update_month = date("m");
+        $update_day = date("d");
+        $update_hour = date("G");
+
+        $table_last_watering_inject_query = "UPDATE `$table_last_watering_name` SET `mois`='$update_month',`jour`='$update_day',`heure`='$update_hour' WHERE 1";
+        $db_connection->query($table_last_watering_inject_query);
+    }
 
     // We inject the data to the sensors table
     $db_connection->query($inject_data_query);
