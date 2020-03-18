@@ -29,8 +29,6 @@
                     <td><input type="text" required id="username" name="username" size="16" maxlength="16"></td>
                 </tr>
 
-                <br>
-
                 <tr>
                     <td><label for="password">Password - </label></td>
                     <td><input type="password" required id="password" name="password" size="16"></td>
@@ -42,7 +40,29 @@
             <input type="submit" value="OK">
         </form>
 
+        <a href="./nukedb.php">Mot de passe oublié</a>
+
+        <?php
+
+        // Importation des librairies
+        require_once "./assets/lib/lib_jardin_autonome.php";
+
+        // On regarde si la BDD existe
+        if (check_if_db_exists() == false) {
+            initialize_database();
+
+            echo "<div class='footer'>
+            <h4>
+            Il semblerait que vous vous connectez pour la première fois,
+            <br>
+            vôtre nom d'utilisateur est '<em>jardin</em>' et vôtre mot de passe est '<em>autonome</em>'</h4>
+            </div>";
+        }
+
+        ?>
+
     </div>
+
 
 </body>
 

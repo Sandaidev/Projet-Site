@@ -22,18 +22,6 @@
         </div>
     </div>
 
-    <?php
-
-    // Importation des librairies
-    require_once "./assets/lib/lib_jardin_autonome.php";
-
-    // On regarde si la BDD existe
-    if (check_if_db_exists() == false) {
-        initialize_database();
-    }
-
-    ?>
-
 </body>
 
 </html>
