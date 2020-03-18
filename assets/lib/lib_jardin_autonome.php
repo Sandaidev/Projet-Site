@@ -270,6 +270,8 @@ function return_formatted_sensor_table()
     global $db_password;
     global $table_sensors_name;
     global $db_name;
+    global $table_last_refill_name;
+    global $table_last_watering_name;
 
     $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
 
@@ -299,12 +301,27 @@ function return_formatted_sensor_table()
         }
     }
 
-    $humidite_value = $row['HUMIDITE'];
+    $humidity_value = $row['HUMIDITE'];
+
+    $select_water_tank_refill_query = "SELECT * FROM $table_last_refill_name";
+    $last_refill_result = $db_connection->query($select_water_tank_refill_query);
+    $last_refill_row = $last_refill_result->fetch_assoc();
+
+    $select_last_watering_query = "SELECT * FROM $table_last_watering_name";
+    $last_watering_result = $db_connection->query($select_last_watering_query);
+    $last_watering_row = $last_watering_result->fetch_assoc();
+
     $db_connection->close();
 
     $final_result = [
-        'HUMIDITE_TERRE' => $humidite_value,
-        'POURCENTAGE_CUVE' => $cuve_percentage
+        'HUMIDITE_TERRE' => $humidity_value,
+        'POURCENTAGE_CUVE' => $cuve_percentage,
+        'DERNIERE_RECHARGE_CUVE_MOIS' => $last_refill_row['mois'],
+        'DERNIERE_RECHARGE_CUVE_JOUR' => $last_refill_row['jour'],
+        'DERNIERE_RECHARGE_CUVE_HEURE' => $last_refill_row['heure'],
+        'DERNIER_ARROSAGE_MOIS' => $last_watering_row['mois'],
+        'DERNIER_ARROSAGE_JOUR' => $last_watering_row['jour'],
+        'DERNIER_ARROSAGE_HEURE' => $last_watering_row['heure']
     ];
 
     return $final_result;
