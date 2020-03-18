@@ -100,15 +100,9 @@ function initialize_database()
         '$creds_default_username',
         '$creds_default_password')";
 
-    $initialize_table_last_watering_query = "INSERT INTO `$table_last_watering_name`(`mois`, `jour`, `heure`) VALUES (
-        $table_last_watering_default_value,
-        $table_last_watering_default_value,
-        $table_last_watering_default_value)";
+    $initialize_table_last_watering_query = "INSERT INTO `last_watering` (`mois`, `jour`, `heure`) VALUES ('syncing...', 'syncing...', 'syncing...')";
 
-    $initialize_table_last_refill_query = "INSERT INTO `$table_last_refill_name`(`mois`, `jour`, `heure`) VALUES (
-        $table_last_refill_default_value,
-        $table_last_refill_default_value,
-        $table_last_refill_default_value)";
+    $initialize_table_last_refill_query = "INSERT INTO `last_refill` (`mois`, `jour`, `heure`) VALUES ('syncing...', 'syncing...', 'syncing...')";
 
     $db_connection->query($initialize_table_sensors_query);
     $db_connection->query($initialize_table_creds_query);
@@ -272,6 +266,7 @@ function return_formatted_sensor_table()
     global $db_name;
     global $table_last_refill_name;
     global $table_last_watering_name;
+    global $table_history_name;
 
     $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
 
@@ -311,6 +306,10 @@ function return_formatted_sensor_table()
     $last_watering_result = $db_connection->query($select_last_watering_query);
     $last_watering_row = $last_watering_result->fetch_assoc();
 
+    $select_history_query = "SELECT * FROM $table_history_name";
+    $history_result = $db_connection->query($select_history_query);
+    $history_row = $history_result->fetch_assoc();
+
     $db_connection->close();
 
     $final_result = [
@@ -321,7 +320,10 @@ function return_formatted_sensor_table()
         'DERNIERE_RECHARGE_CUVE_HEURE' => $last_refill_row['heure'],
         'DERNIER_ARROSAGE_MOIS' => $last_watering_row['mois'],
         'DERNIER_ARROSAGE_JOUR' => $last_watering_row['jour'],
-        'DERNIER_ARROSAGE_HEURE' => $last_watering_row['heure']
+        'DERNIER_ARROSAGE_HEURE' => $last_watering_row['heure'],
+        'DERNIERE_MISE_A_JOUR_MOIS' => $history_row['mois'],
+        'DERNIERE_MISE_A_JOUR_JOUR' => $history_row['jour'],
+        'DERNIERE_MISE_A_JOUR_HEURE' => $history_row['heure']
     ];
 
     return $final_result;
