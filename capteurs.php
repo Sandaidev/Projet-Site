@@ -32,6 +32,8 @@ if (check_if_session_is_valid($_SESSION) == false) {
     </div>
 
     <div class="login-container">
+        <h2>Capteurs</h2>
+        <hr>
 
         <?php
         require_once "./assets/lib/lib_jardin_autonome.php";
