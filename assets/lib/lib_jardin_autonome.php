@@ -13,7 +13,8 @@ $creds_default_password = "autonome";
 $table_sensors_default_value = "syncing...";
 $table_last_watering_default_value = "syncing...";
 $table_last_watering_name = "last_watering";
-
+$table_last_refill_name = "last_refill";
+$table_last_refill_default_value = "syncing...";
 
 function initialize_database()
 {
@@ -35,6 +36,8 @@ function initialize_database()
     global $table_sensors_default_value;
     global $table_last_watering_name;
     global $table_last_watering_default_value;
+    global $table_last_refill_name;
+    global $table_last_refill_default_value;
 
     // Create and initialize a new mysqli object (Oriented Object amirite)
     $db_connection = new mysqli($db_servername, $db_username, $db_password);
@@ -78,6 +81,9 @@ function initialize_database()
 
     $create_table_last_watering_query = "CREATE TABLE `$table_last_watering_name` ( `mois` VARCHAR(20) NOT NULL , `jour` VARCHAR(20) NOT NULL , `heure` VARCHAR(20) NOT NULL )";
 
+    $create_table_last_refill_query = "CREATE TABLE `$table_last_refill_name` ( `mois` VARCHAR(20) NOT NULL , `jour` VARCHAR(20) NOT NULL , `heure` VARCHAR(20) NOT NULL )";
+
+    $db_connection->query($create_table_last_refill_query);
     $db_connection->query($create_table_history_query);
     $db_connection->query($create_table_sensors_query);
     $db_connection->query($create_table_creds_query);
@@ -99,9 +105,15 @@ function initialize_database()
         $table_last_watering_default_value,
         $table_last_watering_default_value)";
 
+    $initialize_table_last_refill_query = "INSERT INTO `$table_last_refill_name`(`mois`, `jour`, `heure`) VALUES (
+        $table_last_refill_default_value,
+        $table_last_refill_default_value,
+        $table_last_refill_default_value)";
+
     $db_connection->query($initialize_table_sensors_query);
     $db_connection->query($initialize_table_creds_query);
     $db_connection->query($initialize_table_last_watering_query);
+    $db_connection->query($initialize_table_last_refill_query);
     $db_connection->close();
 
     return true;
@@ -138,19 +150,31 @@ function inject_sensors_data_into_db($cuve_1, $cuve_2, $cuve_3, $cuve_4, $humidi
     global $table_sensors_name;
     global $db_name;
     global $table_last_watering_name;
+    global $table_sensors_default_value;
+    global $table_sensors_name;
+    global $table_last_refill_name;
 
     $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
 
-    $retrieve_data_query = "SELECT * FROM $table_sensors_name";
-    $inject_data_query = "UPDATE `$table_sensors_name` SET `CUVE1`='$cuve_1',`CUVE2`='$cuve_2',`CUVE3`='$cuve_3',`CUVE4`='$cuve_4',`HUMIDITE`='$humidite' WHERE 1";
+    $retrieve_sensors_data_query = "SELECT * FROM $table_sensors_name";
+    $inject_sensors_data_query = "UPDATE `$table_sensors_name` SET `CUVE1`='$cuve_1',`CUVE2`='$cuve_2',`CUVE3`='$cuve_3',`CUVE4`='$cuve_4',`HUMIDITE`='$humidite' WHERE 1";
 
     // We get the old humidity value from the database and compare it against the new one
-    $result = $db_connection->query($retrieve_data_query);
-    $row = $result->fetch_assoc();
+    $sensors_data_result = $db_connection->query($retrieve_sensors_data_query);
+    $sensors_row = $sensors_data_result->fetch_assoc();
 
-    $old_humidity_value = $row['HUMIDITE'];
+    $old_humidity_value = $sensors_row['HUMIDITE'];
 
-    if ($humidite > $old_humidity_value) {
+    if ($old_humidity_value == $table_sensors_default_value) {
+        // The value in the DB is the default one,
+        // 
+        $update_month = date("m");
+        $update_day = date("d");
+        $update_hour = date("G");
+
+        $table_last_watering_inject_query = "UPDATE `$table_last_watering_name` SET `mois`='$update_month',`jour`='$update_day',`heure`='$update_hour' WHERE 1";
+        $db_connection->query($table_last_watering_inject_query);
+    } elseif ($humidite > $old_humidity_value) {
         // The new humidity value is greater than the older one,
         // We need to update the last_watering table
 
@@ -162,8 +186,38 @@ function inject_sensors_data_into_db($cuve_1, $cuve_2, $cuve_3, $cuve_4, $humidi
         $db_connection->query($table_last_watering_inject_query);
     }
 
+    // We now need to check if the water tank has been refilled,
+    $old_tank_percentage = return_formatted_sensor_table()['POURCENTAGE_CUVE'];
+    $new_tank_percentage = "0%";
+
+    if ($cuve_1 == 1) {
+        $new_tank_percentage = "25%";
+
+        if ($cuve_2 == 1) {
+            $new_tank_percentage = "50%";
+
+            if ($cuve_3 == 1) {
+                $new_tank_percentage = "75%";
+
+                if ($cuve_4 == 1) {
+                    $new_tank_percentage = "100%";
+                }
+            }
+        }
+    }
+
+    if ($new_tank_percentage > $old_tank_percentage) {
+        // The water tank was refilled, we inject the new date into the water tank table
+        $update_month = date("m");
+        $update_day = date("d");
+        $update_hour = date("G");
+
+        $water_tank_injection_query = "UPDATE `$table_last_refill_name` SET `mois`='$update_month',`jour`='$update_day',`heure`='$update_hour' WHERE 1";
+        $db_connection->query($water_tank_injection_query);
+    }
+
     // We inject the data to the sensors table
-    $db_connection->query($inject_data_query);
+    $db_connection->query($inject_sensors_data_query);
 
     // We now need to add a new line to the history table, with the current date.
     insert_date_into_stats(date("m"), date("d"), date("G"));
