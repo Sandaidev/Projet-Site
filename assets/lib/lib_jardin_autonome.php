@@ -7,6 +7,10 @@ $db_password = "";
 $db_name = "jardin";
 $table_sensors_name = "capteurs";
 $table_history_name = "historique";
+$table_creds_name = "creds";
+$creds_default_username = "jardin";
+$creds_default_password = "autonome";
+$table_sensors_default_value = "syncing...";
 
 
 function initialize_database()
@@ -23,6 +27,10 @@ function initialize_database()
     global $db_name;
     global $table_sensors_name;
     global $table_history_name;
+    global $table_creds_name;
+    global $creds_default_username;
+    global $creds_default_password;
+    global $table_sensors_default_value;
 
     // Create and initialize a new mysqli object (Oriented Object amirite)
     $db_connection = new mysqli($db_servername, $db_username, $db_password);
@@ -62,12 +70,25 @@ function initialize_database()
         `heure` varchar(10) DEFAULT NULL
       )";
 
+    $create_table_creds_query = "CREATE TABLE `$table_creds_name` ( `username` VARCHAR(20) NOT NULL , `password` VARCHAR(64) NOT NULL )";
+
     $db_connection->query($create_table_history_query);
     $db_connection->query($create_table_sensors_query);
+    $db_connection->query($create_table_creds_query);
 
-    $initialize_table_sensors_query = "INSERT INTO `$table_sensors_name` (`CUVE1`, `CUVE2`, `CUVE3`, `CUVE4`, `HUMIDITE`) VALUES ('0', '0', '0', '0', '0')";
+    $initialize_table_sensors_query = "INSERT INTO `$table_sensors_name` (`CUVE1`, `CUVE2`, `CUVE3`, `CUVE4`, `HUMIDITE`) VALUES (
+    '$table_sensors_default_value',
+    '$table_sensors_default_value',
+    '$table_sensors_default_value',
+    '$table_sensors_default_value',
+    '$table_sensors_default_value')";
+
+    $initialize_table_creds_query = "INSERT INTO `creds` (`username`, `password`) VALUES (
+    '$creds_default_username',
+    '$creds_default_password')";
+
     $db_connection->query($initialize_table_sensors_query);
-
+    $db_connection->query($initialize_table_creds_query);
     $db_connection->close();
 
     return true;
@@ -214,4 +235,60 @@ function nuke_database()
 
     $db_connection->query($drop_db_query);
     $db_connection->close();
+}
+
+function check_if_session_is_valid($session_array_data)
+{
+    /*
+    * Checks the session data / credentials based on the superglobal $_SESSION parameter (here $session_array_data)
+    */
+
+    global $db_servername;
+    global $db_username;
+    global $db_password;
+    global $db_name;
+    global $table_creds_name;
+
+    $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
+    $select_creds_query = "SELECT * FROM $table_creds_name";
+
+    $result = $db_connection->query($select_creds_query);
+    $row = $result->fetch_assoc();
+
+    $db_connection->close();
+
+    if (isset($session_array_data['username']) && !empty($session_array_data['username'])) {
+        // Si les creds existent, mais qu'ils sont invalides
+        if ($row['username'] != $session_array_data['username'] || $row['password'] != $session_array_data['password']) {
+            return false;
+        }
+    } else {
+        // Les creds n'existent pas
+        return false;
+    }
+
+    return true;
+}
+
+function check_if_creds_are_valid($username, $password)
+{
+    global $db_servername;
+    global $db_username;
+    global $db_password;
+    global $db_name;
+    global $table_creds_name;
+
+    $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
+    $select_creds_query = "SELECT * FROM $table_creds_name";
+
+    $result = $db_connection->query($select_creds_query);
+    $row = $result->fetch_assoc();
+
+    $db_connection->close();
+
+    if ($row['username'] == $username && $row['password'] == $password) {
+        return true;
+    } else {
+        return false;
+    }
 }
