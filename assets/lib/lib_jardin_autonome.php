@@ -292,3 +292,22 @@ function check_if_creds_are_valid($username, $password)
         return false;
     }
 }
+
+function modify_creds_in_database($new_username, $new_password)
+{
+    /*
+    * Change the credentials inside the database
+    */
+
+    global $db_servername;
+    global $db_username;
+    global $db_password;
+    global $db_name;
+    global $table_creds_name;
+
+    $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
+    $modify_creds_query = "UPDATE `$table_creds_name` SET `username`='$new_username',`password`='$new_password' WHERE 1";
+
+    $db_connection->query($modify_creds_query);
+    $db_connection->close();
+}
