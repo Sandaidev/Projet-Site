@@ -23,15 +23,16 @@ if (check_if_session_is_valid($_SESSION) == false) {
         </div>
 
         <div class="header-right">
-            <a class="header-right active" href="./home.php">Accueil</a>
-            <a class="header-right" href="./stats.php">Stats</a>
-            <a class="header-right" href="./capteurs.php">Capteurs</a>
-            <a class="header-right" href="./about.html">À propos</a>
+            <a class="active" href="./home.php">Accueil</a>
+            <a href="./stats.php">Stats</a>
+            <a href="./capteurs.php">Capteurs</a>
+            <a href="./settings.php">Paramètres</a>
+            <a href="./about.html">À propos</a>
         </div>
     </div>
 
     <div class="login-container">
-        <img src="https://media.giphy.com/media/BIuuwHRNKs15C/giphy.gif">
+
     </div>
 
 </body>
