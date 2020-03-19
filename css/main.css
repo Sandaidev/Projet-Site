@@ -20,9 +20,9 @@ html {
 	overflow: hidden;
 	background-color: lightgrey;
 	padding: 20px 10px;
-	border-radius: 20px;
+	border-radius: 10px;
 
-	box-shadow: grey 2px 2px 2px;
+	/*box-shadow: black 2px 2px 2px;*/
 }
 	
 /* Style les liens du header */
@@ -34,7 +34,7 @@ html {
 	text-decoration: none;
 	font-size: 18px;
 	line-height: 25px;
-	border-radius: 4px;
+	border-radius: 5px;
 }
 	
 /* Style le lien du logo */
@@ -43,19 +43,18 @@ html {
 }
 	
 /* Style du lien au hover */
-/*
+
 .header a:hover {
 	background-color: rgb(196, 196, 196);
 }
-*/
+
 
 /* Style du lien actif */
 .header a.active {
 	background-color: black;
 	color: white;
 
-	box-shadow: black 2px 2px 5px;
-
+	/*box-shadow: black 2px 2px 5px;*/
 }
 
 /* Les liens vers la droite */

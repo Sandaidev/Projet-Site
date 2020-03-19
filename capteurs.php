@@ -45,8 +45,8 @@ if (check_if_session_is_valid($_SESSION) == false) {
 
         echo "<p>Humidité de la terre :</p>
 
-        <div class='w3-light-grey w3-round'>
-            <div class='w3-round w3-blue' style='width:" . $formatted_humidity . "'>" . $formatted_humidity . "</div>
+        <div class='w3-light-grey w3-round-xlarge'>
+            <div class='w3-round-xlarge w3-blue' style='width:" . $formatted_humidity . "'>" . $formatted_humidity . "</div>
           </div>";
 
         echo "<hr>";
