@@ -39,7 +39,7 @@ if (check_if_session_is_valid($_SESSION) == false) {
         require_once "./assets/lib/lib_jardin_autonome.php";
 
         $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
-        $select_history_query = "SELECT * FROM $table_history_name LIMIT 16";
+        $select_history_query = "SELECT * FROM $table_history_name ORDER BY id DESC LIMIT 16";
 
         $select_history_result = $db_connection->query($select_history_query);
 
