@@ -43,7 +43,7 @@ if (check_if_session_is_valid($_SESSION) == false) {
         echo "<p>Niveau d'eau dans la cuve :</p>
 
         <div class='w3-light-grey w3-round'>
-            <div class='w3-container w3-round w3-blue' style='width:" . $sensors_data['POURCENTAGE_CUVE'] . "'>" . $sensors_data['POURCENTAGE_CUVE'] . "</div>
+            <div class='w3-round w3-blue' style='width:" . $sensors_data['POURCENTAGE_CUVE'] . "'>" . $sensors_data['POURCENTAGE_CUVE'] . "</div>
           </div>
 
         ";
