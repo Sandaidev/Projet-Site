@@ -41,7 +41,7 @@ if (check_if_session_is_valid($_SESSION) == false) {
 
         $sensors_data = return_formatted_sensor_table();
 
-        $formatted_humidity = floatval($sensors_data['HUMIDITE_TERRE']) * 100 . "%";
+        $formatted_humidity = $sensors_data['HUMIDITE_TERRE'];
 
         echo "<p>Humidité de la terre :</p>
 

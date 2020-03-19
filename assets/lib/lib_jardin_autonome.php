@@ -310,8 +310,10 @@ function return_formatted_sensor_table()
 
     $db_connection->close();
 
+    $formatted_humidity = floatval($humidity_value) * 100 . "%";
+
     $final_result = [
-        'HUMIDITE_TERRE' => $humidity_value,
+        'HUMIDITE_TERRE' => $formatted_humidity,
         'POURCENTAGE_CUVE' => $cuve_percentage,
         'DERNIERE_RECHARGE_CUVE_MOIS' => $last_refill_row['mois'],
         'DERNIERE_RECHARGE_CUVE_JOUR' => $last_refill_row['jour'],
