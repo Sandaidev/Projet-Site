@@ -146,6 +146,7 @@ function inject_sensors_data_into_db($cuve_1, $cuve_2, $cuve_3, $cuve_4, $humidi
     global $table_sensors_default_value;
     global $table_sensors_name;
     global $table_last_refill_name;
+    global $table_history_name;
 
     $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
 
@@ -203,29 +204,12 @@ function inject_sensors_data_into_db($cuve_1, $cuve_2, $cuve_3, $cuve_4, $humidi
     $db_connection->query($inject_sensors_data_query);
 
     // We now need to add a new line to the history table, with the current date.
-    insert_date_into_stats(date("m"), date("d"), date("G"));
-
-    $db_connection->close();
-}
-
-function insert_date_into_stats($month, $day, $hour)
-{
-    /*
-    * We insert a new date in the history table.
-    */
-
-    global $db_servername;
-    global $db_username;
-    global $db_password;
-    global $table_history_name;
-    global $db_name;
-
-    $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
-    $insertion_query = "INSERT INTO `$table_history_name`(`id`, `mois`, `jour`, `heure`) VALUES (NULL,$month,$day,$hour)";
+    $insertion_query = "INSERT INTO `$table_history_name`(`id`, `mois`, `jour`, `heure`) VALUES (NULL,'$update_month','$update_day','$update_hour')";
 
     $db_connection->query($insertion_query);
     $db_connection->close();
 }
+
 
 function truncate_history_table()
 {
