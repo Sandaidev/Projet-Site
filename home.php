@@ -49,11 +49,11 @@ if (check_if_session_is_valid($_SESSION) == false) {
         ";
 
         echo "<hr>";
-        echo "Dernier rechargement de la cuve : Le <strong>" . $sensors_data['DERNIERE_RECHARGE_CUVE_MOIS'] . "/"
-            . $sensors_data['DERNIERE_RECHARGE_CUVE_JOUR'] . "</strong> à <strong>" . $sensors_data['DERNIERE_RECHARGE_CUVE_HEURE'] . "h</strong>";
+        echo "Dernier rechargement de la cuve : Le <strong>" . $sensors_data['DERNIERE_RECHARGE_CUVE_JOUR'] . "/"
+            . $sensors_data['DERNIERE_RECHARGE_CUVE_MOIS'] . "</strong> à <strong>" . $sensors_data['DERNIERE_RECHARGE_CUVE_HEURE'] . "h</strong>";
         echo "<br>";
-        echo "Dernier arrosage : Le <strong>" . $sensors_data['DERNIER_ARROSAGE_MOIS'] . "/"
-            . $sensors_data['DERNIER_ARROSAGE_JOUR'] . "</strong> à <strong>" . $sensors_data['DERNIER_ARROSAGE_HEURE'] . "h</strong>";
+        echo "Dernier arrosage : Le <strong>" . $sensors_data['DERNIER_ARROSAGE_JOUR'] . "/"
+            . $sensors_data['DERNIER_ARROSAGE_MOIS'] . "</strong> à <strong>" . $sensors_data['DERNIER_ARROSAGE_HEURE'] . "h</strong>";
         echo "<br>";
 
         ?>

@@ -50,8 +50,8 @@ if (check_if_session_is_valid($_SESSION) == false) {
           </div>";
 
         echo "<hr>";
-        echo "Dernière mise à jour : Le <strong>" . $sensors_data['DERNIERE_MISE_A_JOUR_MOIS'] . "/"
-            . $sensors_data['DERNIERE_MISE_A_JOUR_JOUR'] . "</strong> à <strong>" . $sensors_data['DERNIERE_MISE_A_JOUR_HEURE'] . "h</strong>";
+        echo "Dernière mise à jour : Le <strong>" . $sensors_data['DERNIERE_MISE_A_JOUR_JOUR'] . "/"
+            . $sensors_data['DERNIERE_MISE_A_JOUR_MOIS'] . "</strong> à <strong>" . $sensors_data['DERNIERE_MISE_A_JOUR_HEURE'] . "h</strong>";
         ?>
 
     </div>
