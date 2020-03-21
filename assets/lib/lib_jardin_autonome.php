@@ -10,11 +10,15 @@ $table_history_name = "historique";
 $table_creds_name = "creds";
 $creds_default_username = "jardin";
 $creds_default_password = "autonome";
-$table_sensors_default_value = "syncing...";
-$table_last_watering_default_value = "syncing...";
+
+$db_generic_default_value = "syncing...";
+$table_sensors_default_value = $db_generic_default_value;
+$table_last_watering_default_value = $db_generic_default_value;
+$table_last_refill_default_value = $db_generic_default_value;
+
 $table_last_watering_name = "last_watering";
 $table_last_refill_name = "last_refill";
-$table_last_refill_default_value = "syncing...";
+
 
 function initialize_database()
 {
@@ -110,6 +114,27 @@ function initialize_database()
     $db_connection->close();
 
     return true;
+}
+
+function check_if_db_contains_default_data()
+{
+    /*
+    * OK, donc là c'est chaud, si la BDD contient UNE valeur égale au $default_value
+    * On redirige l'utilisateur vers une page temporaire (on a pas les données donc c'est chaud)
+    * Et on propose une option pour avoir la page Debug
+    */
+
+    global $db_generic_default_value;
+
+    // Logiquement, cette fonction est exécutée APRÈS avoir initialisé la BDD
+    $db_data_array = return_formatted_sensor_table();
+
+    foreach ($db_data_array as $array_item) {
+        if ($array_item == $db_generic_default_value) {
+            echo "<script>window.location.replace('no_data.php');</script>";
+            die();
+        }
+    }
 }
 
 function check_if_db_exists()
