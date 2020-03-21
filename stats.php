@@ -4,6 +4,7 @@ require_once "./assets/lib/lib_jardin_autonome.php";
 if (check_if_session_is_valid($_SESSION) == false) {
     echo "<script>window.location.replace('index.php');</script>";
 }
+check_if_db_contains_default_data();
 ?>
 
 <!DOCTYPE html>
