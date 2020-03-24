@@ -176,7 +176,7 @@ function inject_sensors_data_into_db($cuve_1, $cuve_2, $cuve_3, $cuve_4, $humidi
     $db_connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
 
     $retrieve_sensors_data_query = "SELECT * FROM $table_sensors_name";
-    $inject_sensors_data_query = "UPDATE `capteurs` SET `CUVE1`=$cuve_1,`CUVE2`=$cuve_2,`CUVE3`=$cuve_3,`CUVE4`=$cuve_4,`HUMIDITE`=$humidite WHERE 1";
+    $inject_sensors_data_query = "UPDATE `capteurs` SET `CUVE1`=$cuve_1,`CUVE2`=$cuve_2,`CUVE3`=$cuve_3,`CUVE4`=$cuve_4,`HUMIDITE`=$humidite";
 
     // We get the old humidity value from the database and compare it against the new one
     $sensors_data_result = $db_connection->query($retrieve_sensors_data_query);
@@ -191,7 +191,7 @@ function inject_sensors_data_into_db($cuve_1, $cuve_2, $cuve_3, $cuve_4, $humidi
         $update_day = date("d");
         $update_hour = date("G");
 
-        $table_last_watering_inject_query = "UPDATE `$table_last_watering_name` SET `mois`='$update_month',`jour`='$update_day',`heure`='$update_hour' WHERE 1";
+        $table_last_watering_inject_query = "UPDATE `$table_last_watering_name` SET `mois`='$update_month',`jour`='$update_day',`heure`='$update_hour'";
         $db_connection->query($table_last_watering_inject_query);
     }
 
@@ -221,7 +221,7 @@ function inject_sensors_data_into_db($cuve_1, $cuve_2, $cuve_3, $cuve_4, $humidi
         $update_day = date("d");
         $update_hour = date("G");
 
-        $water_tank_injection_query = "UPDATE `$table_last_refill_name` SET `mois`='$update_month',`jour`='$update_day',`heure`='$update_hour' WHERE 1";
+        $water_tank_injection_query = "UPDATE `$table_last_refill_name` SET `mois`='$update_month',`jour`='$update_day',`heure`='$update_hour'";
         $db_connection->query($water_tank_injection_query);
     }
 
