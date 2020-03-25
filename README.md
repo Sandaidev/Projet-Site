@@ -18,3 +18,25 @@ Pour que le site fonctionne, il faut ces paquets installés sur le serveur de pr
 - Modifier les infos de login dans les variables globales `$db_*` dans `./assets/lib/lib_jardin_autonome.php`
 - Normalement le site devrait être OK, faites un bug report si c'est pas le cas.
 
+## Screenshots
+
+- Connexion :
+![](./demo/login_page.png)
+
+- Synchronisation :
+![](./demo/syncing.png)
+
+- Accueil :
+![](./demo/homep.png)
+
+- Statistiques :
+![](./demo/statsp.png)
+
+- Capteurs : 
+![](./demo/humidityp.png)
+
+- Paramètres :
+![](./demo/settingsp.png)
+
+- À propos :
+![](./demo/aboutp.png)
