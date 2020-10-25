@@ -43,29 +43,34 @@ function initialize_database()
     global $table_last_refill_name;
     global $table_last_refill_default_value;
 
-    // Create and initialize a new mysqli object (Oriented Object amirite)
+    // MySQLi à la rescousse
     $db_connection = new mysqli($db_servername, $db_username, $db_password);
 
-    // Check if the connection we just made is valid
+    // Check la connexion à la BDD
     if ($db_connection->connect_error) {
-        // Stop the function immediately if the connection is not valid.
+        // On tue le script si on a une erreur: my bad, will fix.
         die("MySQLi connection failed! Details: " . $db_connection->connect_error);
     }
 
-    // Before initializing the database, we first need to remove it if it exists
+    // Avant de créer la BDD, on doit supprimer l'ancienne juste pour être sûr; avec PHP on sait jamais.
     $drop_db_query = "DROP DATABASE [IF EXISTS] $db_name";
     $db_connection->query($drop_db_query);
 
     $create_db_query = "CREATE DATABASE jardin";
 
-    // Send the query and stop the script if an error happened
+    // Envoyer la query et arrêter si ça a foiré.
     if ($db_connection->query($create_db_query) != true) {
         die("Error creating database! Details: " . $db_connection->error);
     }
 
-    // We now need to create the tables
+    /*
+    *   Initialisation des tables
+    */
+
+    // Select la BDD, pas de checks car on sait déjà que tout est OK.
     mysqli_select_db($db_connection, $db_name);
 
+    // Var def: SQL Query : Table des capteurs.
     $create_table_sensors_query = "CREATE TABLE `$table_sensors_name` (
         `CUVE1` varchar(10) NOT NULL,
         `CUVE2` varchar(10) NOT NULL,
@@ -74,24 +79,34 @@ function initialize_database()
         `HUMIDITE` varchar(10) NOT NULL
       )";
 
+    // Var def : SQL Query : Table d'historique
     $create_table_history_query = "CREATE TABLE `$table_history_name` ( `id` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
         `mois` VARCHAR(20) NOT NULL,
         `jour` VARCHAR(20) NOT NULL,
         `heure` VARCHAR(20) NOT NULL,
         PRIMARY KEY (`id`))";
 
+/*
+*   ATTENTION CODE POURRI : Comme demandé sur le CDC, LE MOT DE PASSE N'EST PAS HASHÉ!!!
+*   Il est stocké "en clair" dans la BDD... Le client est roi j'imagine.
+*/
+    
     $create_table_creds_query = "CREATE TABLE `$table_creds_name` ( `username` VARCHAR(20) NOT NULL , `password` VARCHAR(64) NOT NULL )";
 
+    // Var def : SQL Query : Table du dernier arrosage 
     $create_table_last_watering_query = "CREATE TABLE `$table_last_watering_name` ( `mois` VARCHAR(20) NOT NULL , `jour` VARCHAR(20) NOT NULL , `heure` VARCHAR(20) NOT NULL )";
 
+    // Var def : SQL Query : Table credentials 
     $create_table_last_refill_query = "CREATE TABLE `$table_last_refill_name` ( `mois` VARCHAR(20) NOT NULL , `jour` VARCHAR(20) NOT NULL , `heure` VARCHAR(20) NOT NULL )";
 
+    // Exécution des queries; création des tables
     $db_connection->query($create_table_last_refill_query);
     $db_connection->query($create_table_history_query);
     $db_connection->query($create_table_sensors_query);
     $db_connection->query($create_table_creds_query);
     $db_connection->query($create_table_last_watering_query);
 
+    // Var def : SQL Query : Initialisation table capteurs avec des placeholders
     $initialize_table_sensors_query = "INSERT INTO `$table_sensors_name` (`CUVE1`, `CUVE2`, `CUVE3`, `CUVE4`, `HUMIDITE`) VALUES (
         '$table_sensors_default_value',
         '$table_sensors_default_value',
@@ -99,14 +114,18 @@ function initialize_database()
         '$table_sensors_default_value',
         '$table_sensors_default_value')";
 
+    // Même chose pour la table mdp + utilisateur
     $initialize_table_creds_query = "INSERT INTO `creds` (`username`, `password`) VALUES (
         '$creds_default_username',
         '$creds_default_password')";
 
+    // Idem pour le dernier arrosage
     $initialize_table_last_watering_query = "INSERT INTO `last_watering` (`mois`, `jour`, `heure`) VALUES ('syncing...', 'syncing...', 'syncing...')";
 
+    // Imotep. Pour la dernière recharge
     $initialize_table_last_refill_query = "INSERT INTO `last_refill` (`mois`, `jour`, `heure`) VALUES ('syncing...', 'syncing...', 'syncing...')";
 
+    // Exécution des queries; initialisation des tables
     $db_connection->query($initialize_table_sensors_query);
     $db_connection->query($initialize_table_creds_query);
     $db_connection->query($initialize_table_last_watering_query);
@@ -119,7 +138,7 @@ function initialize_database()
 function check_if_db_contains_default_data()
 {
     /*
-    * OK, donc là c'est chaud, si la BDD contient UNE valeur égale au $default_value
+    * OK, donc là c'est chaud. Si la BDD contient UNE valeur égale au $default_value
     * On redirige l'utilisateur vers une page temporaire (on a pas les données donc c'est chaud)
     * Et on propose une option pour avoir la page Debug
     */
@@ -129,6 +148,10 @@ function check_if_db_contains_default_data()
     // Logiquement, cette fonction est exécutée APRÈS avoir initialisé la BDD
     $db_data_array = return_formatted_sensor_table();
 
+    // FIXME : /!\ ATTENTION VIEUX HACK POURRI /!\
+    // -------------------------------------------
+    // Il-y-a de meilleures façons de faire une redirection, là c'est impossible de renvoyer un header HTTP sur PHP...
+    // On utilise une balise JS.
     foreach ($db_data_array as $array_item) {
         if ($array_item == $db_generic_default_value) {
             echo "<script>window.location.replace('no_data.php');</script>";
@@ -139,6 +162,11 @@ function check_if_db_contains_default_data()
 
 function check_if_db_exists()
 {
+    /*
+    * Self-explanatory; On essaie d'établir une connexion avec la BDD, si la connexion a échoué (e.g. false),
+    * On select la BDD et on regarde le flag retourné.
+    */
+
     global $db_servername;
     global $db_username;
     global $db_password;
