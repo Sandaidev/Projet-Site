@@ -1,6 +1,6 @@
 # Site Jardin Autonome
 
-**C'est la version server-side, les autres versions se  trouvent sous les repos [client-side](https://github.com/Sandaidev/Projet-Arduino) et [bridge](https://github.com/Sandaidev/Projet-Bridge)
+**Il sagit de la version server-side. Les autres versions se trouvent sous les repos [client-side](https://github.com/Sandaidev/Projet-Arduino) et [bridge](https://github.com/Sandaidev/Projet-Bridge)**
 
 ## Dépendances
 Pour que le site fonctionne, il faut ces paquets installés sur le serveur de prod:
