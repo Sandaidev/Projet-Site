@@ -1,7 +1,6 @@
 # Site Jardin Autonome
 
-**/!\ J'ai pas utilisé de containers [Docker](https://www.docker.com/) ou [LXD](https://linuxcontainers.org/lxd/introduction/) pour ce projet, faites donc attention à la sécurité de votre serveur!** 
-
+**C'est la version server-side, les autres versions se  trouvent sous les repos [client-side](https://github.com/Sandaidev/Projet-Arduino) et [bridge](https://github.com/Sandaidev/Projet-Bridge)
 
 ## Dépendances
 Pour que le site fonctionne, il faut ces paquets installés sur le serveur de prod:
@@ -16,7 +15,7 @@ Pour que le site fonctionne, il faut ces paquets installés sur le serveur de pr
 - Modifier les permissions dans `/var/www/html/` avec `sudo chmod +rw -R /var/www/html/`
 - Dump le repo dans `/var/www/html/` avec la commande `sudo rm -rf /var/www/html/* && git clone https://github.com/sandaidev/projet-site.git && sudo mv projet-site/* /var/www/html/`
 - Modifier les infos de login dans les variables globales `$db_*` dans `./assets/lib/lib_jardin_autonome.php`
-- Normalement le site devrait être OK, faites un bug report si c'est pas le cas.
+- Normalement le site devrait être OK.
 
 ## Screenshots
 
